@@ -1,0 +1,5 @@
+# Development-only files
+.orbit-smoke-test/
+.git/
+.github/
+.DS_Store

@@ -1,0 +1,166 @@
+schema_version: "1.0"
+
+extension:
+  id: "orbit"
+  name: "Spec Kit Orbit"
+  version: "0.1.1"
+  description: "End-to-end Spec Kit SDD orchestrator with artifact-aware continuation and implement-converge loops."
+  category: "process"
+  effect: "read-write"
+  author: "dongttfd"
+  repository: "https://github.com/dongttfd/speckit-orbit"
+  homepage: "https://github.com/dongttfd/speckit-orbit"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=1.2.5,<2.0.0"
+  commands:
+    - "speckit.constitution"
+    - "speckit.specify"
+    - "speckit.clarify"
+    - "speckit.plan"
+    - "speckit.checklist"
+    - "speckit.tasks"
+    - "speckit.analyze"
+    - "speckit.implement"
+    - "speckit.converge"
+
+provides:
+  commands:
+    - name: "speckit.orbit.run"
+      file: "commands/run.md"
+      description: "Run or continue the complete Spec Kit SDD lifecycle through convergence."
+    - name: "speckit.orbit.status"
+      file: "commands/status.md"
+      description: "Inspect the current feature and show the next Orbit phase without changing files."
+    - name: "speckit.orbit.review"
+      file: "commands/review.md"
+      description: "Perform a read-only final review after convergence."
+
+  config:
+    - name: "orbit-config.yml"
+      template: "orbit-config.template.yml"
+      description: "Orbit orchestration policy."
+      required: false
+
+tags:
+  - "sdd"
+  - "orchestration"
+  - "workflow"
+  - "convergence"
+  - "codex"
+
+defaults:
+  mode: "balanced"
+  constitution:
+    require_ready: true
+  clarify:
+    enabled: true
+    max_rounds: 3
+    stop_on_unresolved_critical: true
+  checklist:
+    enabled: true
+  analyze:
+    enabled: true
+    stop_on_critical_findings: true
+  converge:
+    enabled: true
+    max_cycles: 5
+    stop_on_repeated_findings: true
+  review:
+    enabled: true
+    require_clean_convergence: true
+  gates:
+    after_specify: true
+    after_plan: true
+    before_implement: true
+    after_converge: false
+  resume:
+    artifact_aware: true
+    trust_completed_task_markers: true
+  compatibility:
+    strict_major_version: true
+
+config_schema:
+  type: "object"
+  additionalProperties: false
+  properties:
+    mode:
+      type: "string"
+      enum: ["guarded", "balanced", "autonomous"]
+    constitution:
+      type: "object"
+      additionalProperties: false
+      properties:
+        require_ready:
+          type: "boolean"
+    clarify:
+      type: "object"
+      additionalProperties: false
+      properties:
+        enabled:
+          type: "boolean"
+        max_rounds:
+          type: "integer"
+          minimum: 1
+        stop_on_unresolved_critical:
+          type: "boolean"
+    checklist:
+      type: "object"
+      additionalProperties: false
+      properties:
+        enabled:
+          type: "boolean"
+    analyze:
+      type: "object"
+      additionalProperties: false
+      properties:
+        enabled:
+          type: "boolean"
+        stop_on_critical_findings:
+          type: "boolean"
+    converge:
+      type: "object"
+      additionalProperties: false
+      properties:
+        enabled:
+          type: "boolean"
+        max_cycles:
+          type: "integer"
+          minimum: 1
+        stop_on_repeated_findings:
+          type: "boolean"
+    review:
+      type: "object"
+      additionalProperties: false
+      properties:
+        enabled:
+          type: "boolean"
+        require_clean_convergence:
+          type: "boolean"
+    gates:
+      type: "object"
+      additionalProperties: false
+      properties:
+        after_specify:
+          type: "boolean"
+        after_plan:
+          type: "boolean"
+        before_implement:
+          type: "boolean"
+        after_converge:
+          type: "boolean"
+    resume:
+      type: "object"
+      additionalProperties: false
+      properties:
+        artifact_aware:
+          type: "boolean"
+        trust_completed_task_markers:
+          type: "boolean"
+    compatibility:
+      type: "object"
+      additionalProperties: false
+      properties:
+        strict_major_version:
+          type: "boolean"
