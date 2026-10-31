@@ -1,0 +1,4 @@
+*.local.yml
+local-config.yml
+.orbit-smoke-test/
+.DS_Store

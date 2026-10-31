@@ -1,0 +1,55 @@
+# Spec Kit Orbit configuration
+# Installed/scaffolded as .specify/extensions/orbit/orbit-config.yml.
+#
+# Resolution order (later wins):
+#   1. extension.yml defaults
+#   2. orbit-config.yml
+#   3. local override (v1.2.5 runtime: local-config.yml; documented alias: orbit-config.local.yml)
+#   4. supported SPECKIT_ORBIT_* environment overrides
+
+# execution mode:
+# - guarded: pause at every major decision gate
+# - balanced: pause only where human judgment materially changes intent
+# - autonomous: proceed automatically unless blocked by missing/unsafe information
+mode: balanced
+
+constitution:
+  # Orbit never silently rewrites an existing constitution.
+  require_ready: true
+
+clarify:
+  enabled: true
+  max_rounds: 3
+  stop_on_unresolved_critical: true
+
+checklist:
+  enabled: true
+
+analyze:
+  enabled: true
+  stop_on_critical_findings: true
+
+converge:
+  enabled: true
+  max_cycles: 5
+  stop_on_repeated_findings: true
+
+review:
+  enabled: true
+  require_clean_convergence: true
+
+gates:
+  after_specify: true
+  after_plan: true
+  before_implement: true
+  after_converge: false
+
+resume:
+  # Artifact-aware continuation is not the same as Spec Kit workflow-engine
+  # checkpoint/resume. Orbit infers the next phase from current artifacts.
+  artifact_aware: true
+  trust_completed_task_markers: true
+
+compatibility:
+  # Refuse to run on a Spec Kit major version not explicitly supported.
+  strict_major_version: true
